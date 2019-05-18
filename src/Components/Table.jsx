@@ -142,9 +142,10 @@ const toolbarStyles = theme => ({
     },
 });
 
+
 // Set up Table Toolbar
 let EnhancedTableToolbar = props => {
-    const { numSelected, classes } = props;
+    const { numSelected, classes, onDelete } = props;
 
     return (
         <Toolbar
@@ -167,9 +168,12 @@ let EnhancedTableToolbar = props => {
             <div className={classes.actions}>
                 {numSelected > 0 && (
                     <Tooltip title="Delete">
-                        <IconButton aria-label="Delete">
-                            <DeleteIcon />
-                        </IconButton>
+                        <div onClick={onDelete}>
+                            <IconButton aria-label="Delete">
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+                        
                     </Tooltip>
                 )}
             </div>
@@ -196,6 +200,7 @@ const styles = theme => ({
         overflowX: 'auto',
     },
 });
+
 
 // Set up Table Body
 class EnhancedTable extends React.Component {
@@ -225,6 +230,32 @@ class EnhancedTable extends React.Component {
     componentWillUnmount = () => {
         this.unsubscribe();
     }
+
+
+
+
+
+
+    // Delete selected users
+    handleDeleteUsers = () => {
+        console.log('getting to function to delete users')
+        let users = this.state.selected;
+// TODO: Add an alert of "you are goingt o delete: users.... (sweet alert). Are you sure?"
+
+        users.forEach(userId => {
+            firestore.collection("users").doc(userId).delete().then(function () {
+                console.log("Document successfully deleted!");
+            }).catch(function (error) {
+                console.error("Error removing document: ", error);
+            });
+
+        })
+    }
+
+
+
+
+
 
 
     handleRequestSort = (event, property) => {
@@ -283,7 +314,7 @@ class EnhancedTable extends React.Component {
 
         return (
             <Paper className={classes.root}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} onDelete={this.handleDeleteUsers} />
                 <div className={classes.tableWrapper}>
                     <Table className={classes.table} aria-labelledby="tableTitle">
                         <EnhancedTableHead
