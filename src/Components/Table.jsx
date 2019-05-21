@@ -17,8 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten, convertHexToRGB } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { firestore } from '../firebase';
 
 
@@ -193,9 +192,7 @@ const styles = theme => ({
         width: '90%',
         marginTop: theme.spacing.unit * 3,
     },
-    table: {
-        // minWidth: 1020,
-    },
+    table: {},
     tableWrapper: {
         overflowX: 'auto',
     },
@@ -231,32 +228,24 @@ class EnhancedTable extends React.Component {
         this.unsubscribe();
     }
 
-
-
-
-
-
     // Delete selected users
     handleDeleteUsers = () => {
         console.log('getting to function to delete users')
         let users = this.state.selected;
-// TODO: Add an alert of "you are goingt o delete: users.... (sweet alert). Are you sure?"
 
-        users.forEach(userId => {
-            firestore.collection("users").doc(userId).delete().then(function () {
-                console.log("Document successfully deleted!");
-            }).catch(function (error) {
-                console.error("Error removing document: ", error);
-            });
-
-        })
+        // alert and ask for approval (for deleting the user/s)
+        const response = window.confirm("You are about to delete selected data. It will not be possible to retrieve the data in the future. Are you sure?");
+        if (response) {
+            users.forEach(userId => {
+                // delete collection
+                firestore.collection("users").doc(userId).delete().then(function () {
+                    console.log("Users successfully deleted from DB!");
+                }).catch(function (error) {
+                    console.error("Error removing document: ", error);
+                });
+            })
+        }
     }
-
-
-
-
-
-
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
