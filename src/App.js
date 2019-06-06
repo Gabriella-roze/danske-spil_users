@@ -11,7 +11,7 @@ function App() {
         for Danske Spil: Casino
       </header>
       <section>
-        <OutlinedButton link="https://material-ui.com/demos/buttons/#outlined-buttons">Back to Casino</OutlinedButton>
+        <OutlinedButton link="http://ggrdesign.com/KEA/3sem/danskespil">Back to Casino</OutlinedButton>
       </section>
       <EnhancedTable>Back to Casino</EnhancedTable>
       <p>* This website was created as a part of an exam project @KEA MMD programme *</p>
